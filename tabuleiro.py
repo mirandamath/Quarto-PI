@@ -24,6 +24,18 @@ class Tabuleiro():
         self.pecas.append(Peca("PBQO"))
         self.pecas.append(Peca("PBQM"))
 
+    def getPecas(self):
+        return self.pecas
+
+    def pecasRestantes(self):
+        restantes = []
+
+        for i in range(len(self.pecas)):
+            nome = self.pecas[i].getNome()
+            restantes.append("(" + str(i) + "): " + nome)
+
+        return restantes
+
     def imprimeTabuleiro(self):
         print("Coluna     1     2     3      4")
         i = 1 # contador de linhas
@@ -36,23 +48,17 @@ class Tabuleiro():
                     linhaP.append(None)
             print("Linha: " + str(i),linhaP)
             i+=1
-
-        
-    def turno(self):
-        """
-        Retorna de quem é o turno.
-        """
-        if len(self.pecas)%2 == 0:
-            return 1
-        else:
-            return 2
-
-    def trocaTurno(self):
-        """ 
-        Muda de quem é o turno.
-        """
-        if len(self.pecas)%2 == 0:
-            return 2
-        else:
-            return 1
     
+    def jogarPeca(self, peca, linha, coluna):
+        # Checkar se tem uma peca na mesma posicao no tabuleiro
+        if not self.tabuleiro[linha][coluna]:
+            if peca in self.pecas:
+                self.tabuleiro[linha][coluna] = peca
+                self.pecas.remove(peca)
+                return True
+            else:
+                print("Peça não disponivel/inexistente")
+                return False
+        else:
+            print("Posição já ocupada")
+            return False
