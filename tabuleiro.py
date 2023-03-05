@@ -24,11 +24,7 @@ class Tabuleiro():
         self.pecas.append(Peca("PBQO"))
         self.pecas.append(Peca("PBQM"))
 
-
     def imprimeTabuleiro(self):
-        """
-        Prints the board.
-        """
         print("Coluna     1     2     3      4")
         i = 1 # contador de linhas
         for linha in self.tabuleiro:
@@ -40,3 +36,23 @@ class Tabuleiro():
                     linhaP.append(None)
             print("Linha: " + str(i),linhaP)
             i+=1
+
+        
+    def turno(self):
+        """
+        Retorna de quem é o turno.
+        """
+        if len(self.pecas)%2 == 0:
+            return 1
+        else:
+            return 2
+
+    def trocaTurno(self):
+        """ 
+        Muda de quem é o turno.
+        """
+        if len(self.pecas)%2 == 0:
+            return 2
+        else:
+            return 1
+    
