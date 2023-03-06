@@ -1,17 +1,43 @@
 from quarto import Quarto
 
-
-
 if __name__ == "__main__":
     # peca = Peca("")
-    jogo = Quarto()
+    quarto = Quarto()
 
-    jogo.tabuleiro.imprimeTabuleiro()
+    print("QUARTO")
 
-    jogo.tabuleiro.jogarPeca(jogo.tabuleiro.pecas[0], 0,0)
+    tabuleiro = quarto.tabuleiro
+    
+    while True:
+        print("-----------------")
+        print("Vez do jogador:", quarto.turno())
 
-    jogo.tabuleiro.imprimeTabuleiro()
+        print("Tabuleiro Atual:\n")
+        tabuleiro.imprimeTabuleiro()
 
-    jogo.tabuleiro.jogarPeca(jogo.tabuleiro.pecas[0], 0,1)
+        print("Peças Disponíveis\n")
+        print(tabuleiro.pecasRestantes(),"\n")
 
-    jogo.tabuleiro.imprimeTabuleiro()
+        ipeca = input("Jogador " + str(quarto.trocaTurno()) + " escolha a peca para que o jogador " + str(quarto.turno()) + " coloque no tabuleiro (Indice da peça):")
+        peca = tabuleiro.getPecas()[int(ipeca)]
+        print("Jogador " + str(quarto.turno()) + " escolha posição para colocar a peça " + peca.getAbreviacao() + ":")
+        linha = input("Linha(1-4): ")
+        coluna = input("Coluna(1-4): ")
+        
+        tabuleiro.jogarPeca(peca,int(linha)-1,int(coluna)-1)
+
+        if quarto.checkEstado() == "V":
+            tabuleiro.imprimeTabuleiro()
+            print("Jogador: ", quarto.trocaTurno(), " venceu!")
+            break
+        else:
+            print("Estado: " + quarto.checkEstado() + "\n")
+        
+
+        
+
+    
+
+
+
+

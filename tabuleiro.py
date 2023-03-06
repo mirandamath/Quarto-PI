@@ -24,17 +24,23 @@ class Tabuleiro():
         self.pecas.append(Peca("PBQO"))
         self.pecas.append(Peca("PBQM"))
 
+    
     def getPecas(self):
         return self.pecas
 
     def pecasRestantes(self):
-        restantes = []
+        nomes = []
 
         for i in range(len(self.pecas)):
-            nome = self.pecas[i].getNome()
-            restantes.append("(" + str(i) + "): " + nome)
+            nome = ""
+            for j in range(len(self.pecas[i].getNome())):
+                nome = nome + " " + self.pecas[i].getNome()[j]
+            nomes.append(nome)
+            
+        return ["(" + str(i) + "): " + nomes[i] for i in range(len(self.pecas))]
 
-        return restantes
+    def getLinhas(self):
+        return self.tabuleiro
 
     def imprimeTabuleiro(self):
         print("Coluna     1     2     3      4")
@@ -62,3 +68,70 @@ class Tabuleiro():
         else:
             print("Posição já ocupada")
             return False
+    #funçao que checa se há caracteristicas em comum entre 4 peças de uma lista que pode ser formada por uma linha coluna ou diagonal
+    def emComum(self, lista):
+        i = 0
+        j = 0
+        for j in range(4):
+            if len(lista) == 4:
+                print(lista)
+                if(lista[i][j] == lista[i+1][j] and lista[i][j] == lista[i+2][j] and lista[i][j] == lista[i+3][j]):
+                    return True
+        return False
+    
+    def winLinha(self):
+        abreviacoes = []
+        for linha in self.getLinhas():
+            abrLinha = []
+            for elemento in linha:
+                if elemento:
+                    abrLinha.append(elemento.getAbreviacao())
+            abreviacoes.append(abrLinha)
+
+        for lista in abreviacoes:
+            if self.emComum(lista):
+                return True
+        return False
+
+
+    def winColuna(self):
+        abreviacoes = []
+        colunas = [[linha[i] for linha in self.getLinhas()] for i in range(self.numLine)]
+
+        for coluna in colunas:
+            lstCol = []
+            for elemento in coluna:
+                if elemento:
+                    lstCol.append(elemento.getAbreviacao())
+            abreviacoes.append(lstCol)
+
+        for lista in abreviacoes:
+            if self.emComum(lista):
+                return True
+        return False
+
+    def winDiagonal(self):
+
+        diagonalDE = []
+        diagonalED = []
+        abreviacoesDE = []
+        abreviacoesED = []
+
+        i, j = 0, 3
+        for linha in self.tabuleiro:
+            diagonalDE.append(linha[i])
+            diagonalED.append(linha[j])
+            i+=1
+            j-=1
+
+        for elemento in diagonalDE:
+            if elemento:
+                abreviacoesDE.append(elemento.getAbreviacao())
+            
+        for elemento in diagonalED:
+            if elemento:
+                abreviacoesED.append(elemento.getAbreviacao())
+            
+        if(self.emComum(abreviacoesDE) or self.emComum(abreviacoesED)):
+            return True
+        return False

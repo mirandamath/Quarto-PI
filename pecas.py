@@ -1,8 +1,3 @@
-VITORIA = "V"
-INDECISO = "I"
-DERROTA = "D"
-EMAPTE = "E"
-
 class Peca():
 
     caracteristicas = None
