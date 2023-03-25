@@ -40,7 +40,7 @@ class Peca():
             self.abreviacao = "GBCM"
         
         if caracteristicas == "GBQO":
-            self.nome = ["Grande","Branco" "Quadrado", "Oco"]
+            self.nome = ["Grande","Branco" , "Quadrado", "Oco"]
             self.abreviacao = "GBQO"
         
         if caracteristicas == "GBQM":

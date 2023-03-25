@@ -4,18 +4,22 @@ if __name__ == "__main__":
     # peca = Peca("")
     quarto = Quarto()
 
+    # A good heuristic for the Quarto game is to always place the piece that has the most attributes in common with the piece already on the board. 
+
+    
+
     print("QUARTO")
 
     tabuleiro = quarto.tabuleiro
     
     while True:
         print("-----------------")
-        print("Vez do jogador:", quarto.turno())
+        print("Vez do jogador:", quarto.turno(), "\n")
 
-        print("Tabuleiro Atual:\n")
+        print("TABULEIRO ATUAL:\n")
         tabuleiro.imprimeTabuleiro()
 
-        print("Peças Disponíveis\n")
+        print("\nPEÇAS DISPONIVEIS\n")
         print(tabuleiro.pecasRestantes(),"\n")
 
         ipeca = input("Jogador " + str(quarto.trocaTurno()) + " escolha a peca para que o jogador " + str(quarto.turno()) + " coloque no tabuleiro (Indice da peça):")
@@ -32,9 +36,6 @@ if __name__ == "__main__":
             break
         else:
             print("Estado: " + quarto.checkEstado() + "\n")
-        
-
-        
 
     
 

@@ -1,4 +1,5 @@
 from pecas import Peca
+import copy
 class Tabuleiro():
     pecas = []
     numCol = 4
@@ -6,7 +7,9 @@ class Tabuleiro():
     tabuleiro = None
 
     def __init__(self):
-        self.tabuleiro = [[None for  x in range(self.numCol)] for y in range(self.numLine)]
+        # Filling self.tabuleiro with None
+        self.pecas = []
+        self.tabuleiro = [[None for x in range(self.numCol)] for y in range(self.numLine)]
         self.pecas.append(Peca("GPCO"))
         self.pecas.append(Peca("GPCM"))
         self.pecas.append(Peca("GPQO"))
@@ -24,6 +27,13 @@ class Tabuleiro():
         self.pecas.append(Peca("PBQO"))
         self.pecas.append(Peca("PBQM"))
 
+    def copy(self):
+        """
+        Retorna uma cópia do tabuleiro.
+        """
+        t = Tabuleiro()
+        t.tabuleiro = copy.deepcopy(self.tabuleiro)
+        return t
     
     def getPecas(self):
         return self.pecas
@@ -42,18 +52,18 @@ class Tabuleiro():
     def getLinhas(self):
         return self.tabuleiro
 
-    def imprimeTabuleiro(self):
-        print("Coluna     1     2     3      4")
-        i = 1 # contador de linhas
-        for linha in self.tabuleiro:
-            linhaP = []
-            for peca in linha:
-                if peca:
-                    linhaP.append(peca.getAbreviacao())
-                else:
-                    linhaP.append(None)
-            print("Linha: " + str(i),linhaP)
-            i+=1
+    # def imprimeTabuleiro(self):
+    #     print("Coluna     1     2     3      4")
+    #     i = 1 # contador de linhas
+    #     for linha in self.tabuleiro:
+    #         linhaP = []
+    #         for peca in linha:
+    #             if peca:
+    #                 linhaP.append(peca.getAbreviacao())
+    #             else:
+    #                 linhaP.append(None)
+    #         print("Linha: " + str(i),linhaP)
+    #         i+=1
     
     def jogarPeca(self, peca, linha, coluna):
         # Checkar se tem uma peca na mesma posicao no tabuleiro
@@ -74,7 +84,6 @@ class Tabuleiro():
         j = 0
         for j in range(4):
             if len(lista) == 4:
-                print(lista)
                 if(lista[i][j] == lista[i+1][j] and lista[i][j] == lista[i+2][j] and lista[i][j] == lista[i+3][j]):
                     return True
         return False
