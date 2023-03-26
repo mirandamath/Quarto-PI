@@ -51,7 +51,7 @@ class JogadorHumanoQuarto(JogadorHumano):
 class JogadorAgenteQuarto(JogadorAgente):
 
     def escolha(self, jogo : Jogo):
-        profundidade_maxima = 4
+        profundidade_maxima = 5
         pior_valor = float("inf")
         melhor_jogada = JogadaQuarto(None, None)
         jogadas_validas = jogo.gerar_jogadas_validas()
@@ -59,7 +59,7 @@ class JogadorAgenteQuarto(JogadorAgente):
         count = 0
         for proximo_jogo in jogadas_validas:
             count += 1
-            utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
+            utilidade = minimax(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
             if utilidade < pior_valor:
                 pior_valor = utilidade
                 melhor_jogada = proximo_jogo
@@ -70,18 +70,18 @@ class JogadorAgenteQuarto(JogadorAgente):
     # Calcular uma utilidade para cada estado sucessor e o max ira escolher o melhor
     def jogar(self, jogo : Jogo):
         escolha = jogo.turno().proximo_turno().escolha(jogo)
-        profundidade_maxima = 4
+        profundidade_maxima = 5
         melhor_valor = float("-inf")
         melhor_jogada = JogadaQuarto(None, escolha)
         count = 0
         jogadas_validas = jogo.gerar_posicoes_validas(escolha)
         for proximo_jogo in jogadas_validas:
             count += 1
-            utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
+            utilidade = minimax(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
             if utilidade > melhor_valor:
                 melhor_valor = utilidade
                 melhor_jogada = proximo_jogo
-        print(count)
+        print(melhor_jogada.posicao, melhor_jogada.escolha.nome)
         return melhor_jogada
     
 
@@ -96,7 +96,7 @@ class JogoQuarto(Jogo):
         agente.define_proximo_turno(humano)
 
         # Quem joga primeiro
-        self.jogador_turno = agente
+        self.jogador_turno = humano
 
         return (humano, agente)
 
@@ -184,7 +184,9 @@ class JogoQuarto(Jogo):
                     if linha[elemento] == 2:
                         tempUtilidade += 10
                     if linha[elemento] == 3:
-                        tempUtilidade += 20
+                        tempUtilidade += 70
+                    if linha[elemento] == 4:
+                        tempUtilidade += 1000
 
             return tempUtilidade
         
@@ -226,7 +228,9 @@ class JogoQuarto(Jogo):
                     if coluna[elemento] == 2:
                         tempUtilidade += 10
                     if coluna[elemento] == 3:
-                        tempUtilidade += 20
+                        tempUtilidade += 70
+                    if coluna[elemento] == 4:
+                        tempUtilidade += 1000
 
             return tempUtilidade
         
@@ -267,26 +271,29 @@ class JogoQuarto(Jogo):
                     if diagonal[elemento] == 2:
                         tempUtilidade += 10
                     if diagonal[elemento] == 3:
-                        tempUtilidade += 20
+                        tempUtilidade += 100
+                    if diagonal[elemento] == 4:
+                        tempUtilidade += 1000
         
             return tempUtilidade
 
-        utilidade += emComumLinha(self.estado)
-        utilidade += emComumColuna(self.estado)
-        utilidade += emComumDiagonal(self.estado)
+        utilidade += emComumLinha(jogo.estado)
+        utilidade += emComumColuna(jogo.estado)
+        utilidade += emComumDiagonal(jogo.estado)
         # Checar quantas pecas tem na vertical se elas tem algo em comum em peca.nome
 
         # Checar quantas pecas tem na diagonal se elas tem algo em comum em peca.nome
 
+        # print(utilidade)
 
         if self.venceu() and jogador.e_min():
             # Se eh min sempre negativo
             return utilidade * -1
         elif self.venceu() and jogador.e_max():
             # Se eh max sempre positivo
-            return utilidade + 100
+            return utilidade
         else:
-            return utilidade - 15
+            return 0
     
     def winLinha(self, e : Quarto):
         abreviacoes = []
