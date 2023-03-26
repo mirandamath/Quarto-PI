@@ -51,7 +51,7 @@ class JogadorHumanoQuarto(JogadorHumano):
 class JogadorAgenteQuarto(JogadorAgente):
 
     def escolha(self, jogo : Jogo):
-        profundidade_maxima = 2
+        profundidade_maxima = 4
         pior_valor = float("inf")
         melhor_jogada = JogadaQuarto(None, None)
         jogadas_validas = jogo.gerar_jogadas_validas()
@@ -70,7 +70,7 @@ class JogadorAgenteQuarto(JogadorAgente):
     # Calcular uma utilidade para cada estado sucessor e o max ira escolher o melhor
     def jogar(self, jogo : Jogo):
         escolha = jogo.turno().proximo_turno().escolha(jogo)
-        profundidade_maxima = 2
+        profundidade_maxima = 4
         melhor_valor = float("-inf")
         melhor_jogada = JogadaQuarto(None, escolha)
         count = 0
@@ -284,9 +284,9 @@ class JogoQuarto(Jogo):
             return utilidade * -1
         elif self.venceu() and jogador.e_max():
             # Se eh max sempre positivo
-            return utilidade
+            return utilidade + 100
         else:
-            return utilidade
+            return utilidade - 15
     
     def winLinha(self, e : Quarto):
         abreviacoes = []

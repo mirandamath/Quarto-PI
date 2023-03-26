@@ -1,4 +1,5 @@
 from jogoQuarto import JogoQuarto
+import random
 
 if __name__ == '__main__':
     jogo = JogoQuarto()
@@ -8,12 +9,20 @@ if __name__ == '__main__':
     print("QUARTO")
     jogo.imprimir()
 
+    quantidade_jogadas_randomicas = 8
+
     ganhou = "I"
     while ganhou == "I":
+        while quantidade_jogadas_randomicas > 0:
+            jogadas_validas = jogo.gerar_jogadas_validas()
+            jogada_agente = random.choice(jogadas_validas)
+            jogo = jogo.jogar(jogada_agente)
+            quantidade_jogadas_randomicas -= 1
+        jogo.imprimir()
 
         jogada_agente = jogador_agente.jogar(jogo)
         jogo = jogo.jogar(jogada_agente)
-
+            
 
         jogo.imprimir()
         if jogo.estado.checkEstado() == "V":
