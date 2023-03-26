@@ -51,19 +51,39 @@ class Tabuleiro():
 
     def getLinhas(self):
         return self.tabuleiro
+    
+    def getColunas(self):
+        colunas = []
+        for i in range(self.numCol):
+            coluna = []
+            for linha in self.tabuleiro:
+                coluna.append(linha[i])
+            colunas.append(coluna)
+        return colunas
+    
+    def getDiagonais(self):
+        diagonais = []
+        diagonal1 = []
+        diagonal2 = []
+        for i in range(self.numCol):
+            diagonal1.append(self.tabuleiro[i][i])
+            diagonal2.append(self.tabuleiro[i][self.numCol - i - 1])
+        diagonais.append(diagonal1)
+        diagonais.append(diagonal2)
+        return diagonais
 
-    # def imprimeTabuleiro(self):
-    #     print("Coluna     1     2     3      4")
-    #     i = 1 # contador de linhas
-    #     for linha in self.tabuleiro:
-    #         linhaP = []
-    #         for peca in linha:
-    #             if peca:
-    #                 linhaP.append(peca.getAbreviacao())
-    #             else:
-    #                 linhaP.append(None)
-    #         print("Linha: " + str(i),linhaP)
-    #         i+=1
+    def imprimeTabuleiro(self):
+        print("Coluna     1     2     3      4")
+        i = 1 # contador de linhas
+        for linha in self.tabuleiro:
+            linhaP = []
+            for peca in linha:
+                if peca:
+                    linhaP.append(peca.getAbreviacao())
+                else:
+                    linhaP.append(None)
+            print("Linha: " + str(i),linhaP)
+            i+=1
     
     def jogarPeca(self, peca, linha, coluna):
         # Checkar se tem uma peca na mesma posicao no tabuleiro

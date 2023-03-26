@@ -8,14 +8,25 @@ if __name__ == '__main__':
     print("QUARTO")
     jogo.imprimir()
 
-    while jogo.estado.checkEstado() == "I":
-
-        jogada_humano = jogador_humano.jogar(jogo)
-        jogo = jogo.jogar(jogada_humano)
-
-        print(jogo.estado.tabuleiro.tabuleiro)
+    ganhou = "I"
+    while ganhou == "I":
 
         jogada_agente = jogador_agente.jogar(jogo)
         jogo = jogo.jogar(jogada_agente)
 
+
         jogo.imprimir()
+        if jogo.estado.checkEstado() == "V":
+            print(f"{jogo.turno().proximo_turno().identificador} GANHOU!")
+            jogo.imprimir()
+            break
+
+        jogada_humano = jogador_humano.jogar(jogo)
+        jogo = jogo.jogar(jogada_humano)
+
+        if jogo.estado.checkEstado() == "V":
+            print(f"{jogo.turno().proximo_turno()} GANHOU!")
+            jogo.imprimir()
+            break
+        jogo.imprimir()
+        ganhou = jogo.estado.checkEstado()

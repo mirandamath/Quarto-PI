@@ -2,7 +2,7 @@
 def minimax(jogo, jogador, profundidade_maxima = 8):
   # se o jogo acabou ou se a profundidade é máxima
   if jogo.venceu() or jogo.empate() or profundidade_maxima == 0:
-    return jogo.calcular_utilidade(jogador)
+    return jogo.calcular_utilidade(jogo, jogador)
 
   if jogador.e_max(): # turno do MAX
     melhor_valor = float("-inf") # Menos infinito é o menor valor
@@ -25,11 +25,13 @@ def minimax(jogo, jogador, profundidade_maxima = 8):
 def minimax_alfabeta(jogo, jogador, profundidade_maxima = 8, alfa = float("-inf"), beta = float("inf")):
   # se o jogo acabou ou se a profundidade é máxima
   if jogo.venceu() or jogo.empate() or profundidade_maxima == 0:
-    return jogo.calcular_utilidade(jogador)
+    return jogo.calcular_utilidade(jogo, jogador)
 
   if jogador.e_max(): # turno do MAX
     # busca todos os possíveis jogos
-    for proximo_jogo in jogo.gerar_jogadas_validas():
+    jogadas_validas = jogo.gerar_jogadas_validas()
+    # print(len(jogadas_validas))
+    for proximo_jogo in jogadas_validas:
       utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogador.proximo_turno(), profundidade_maxima - 1, alfa, beta)
       alfa = max(utilidade, alfa)
       if alfa >= beta: break
@@ -37,7 +39,9 @@ def minimax_alfabeta(jogo, jogador, profundidade_maxima = 8, alfa = float("-inf"
   
   else: # turno no MIN
     # busca todos os possíveis jogos
-    for proximo_jogo in jogo.gerar_jogadas_validas():
+    jogadas_validas = jogo.gerar_jogadas_validas()
+    # print(len(jogadas_validas))
+    for proximo_jogo in jogadas_validas:
       utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogador.proximo_turno(), profundidade_maxima - 1, alfa, beta)
       beta = min(utilidade, beta)
       if alfa >= beta: break

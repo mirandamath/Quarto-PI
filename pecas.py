@@ -25,7 +25,7 @@ class Peca():
             self.nome = ["Grande", "Preto", "Circular", "Macico"]
             self.abreviacao = "GPCM"
         if caracteristicas == "GPQO":
-            self.nome = ["Grande", "Preto", "Circular", "Oco"]
+            self.nome = ["Grande", "Preto", "Quadrado", "Oco"]
             self.abreviacao = "GPQO"
         if caracteristicas == "GPQM":
             self.nome = ["Grande", "Preto", "Quadrado", "Macico"]
@@ -44,7 +44,7 @@ class Peca():
             self.abreviacao = "GBQO"
         
         if caracteristicas == "GBQM":
-            self.nome = ["Grande","Branco" "Quadrado", "Macico"]
+            self.nome = ["Grande","Branco" ,"Quadrado", "Macico"]
             self.abreviacao = "GBQM"
         
         if caracteristicas == "PPCO":
