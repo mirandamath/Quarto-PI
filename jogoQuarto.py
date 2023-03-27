@@ -51,7 +51,7 @@ class JogadorHumanoQuarto(JogadorHumano):
 class JogadorAgenteQuarto(JogadorAgente):
 
     def escolha(self, jogo : Jogo):
-        profundidade_maxima = 5
+        profundidade_maxima = 1
         pior_valor = float("inf")
         melhor_jogada = JogadaQuarto(None, None)
         jogadas_validas = jogo.gerar_jogadas_validas()
@@ -70,7 +70,7 @@ class JogadorAgenteQuarto(JogadorAgente):
     # Calcular uma utilidade para cada estado sucessor e o max ira escolher o melhor
     def jogar(self, jogo : Jogo):
         escolha = jogo.turno().proximo_turno().escolha(jogo)
-        profundidade_maxima = 5
+        profundidade_maxima = 1
         melhor_valor = float("-inf")
         melhor_jogada = JogadaQuarto(None, escolha)
         count = 0

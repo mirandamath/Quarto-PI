@@ -9,10 +9,11 @@ if __name__ == '__main__':
     print("QUARTO")
     jogo.imprimir()
 
-    quantidade_jogadas_randomicas = 10
+    quantidade_jogadas_randomicas = 3
 
-    ganhou = "I"
-    while ganhou == "I":
+    resultado = "I"
+    while resultado == "I":
+        """         
         while quantidade_jogadas_randomicas > 0:
             jogadas_validas = jogo.gerar_jogadas_validas()
             jogada_agente = random.choice(jogadas_validas)
@@ -20,7 +21,8 @@ if __name__ == '__main__':
             if tempJogo.estado.checkEstado() != "V":
                 jogo = jogo.jogar(jogada_agente)
                 quantidade_jogadas_randomicas -= 1
-        jogo.imprimir()
+            jogo.imprimir() 
+        """
 
         jogada_humano = jogador_humano.jogar(jogo)
         jogo = jogo.jogar(jogada_humano)
@@ -40,4 +42,4 @@ if __name__ == '__main__':
             jogo.imprimir()
             break
         jogo.imprimir()
-        ganhou = jogo.estado.checkEstado()
+        resultado = jogo.estado.checkEstado()
