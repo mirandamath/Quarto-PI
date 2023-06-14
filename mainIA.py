@@ -7,9 +7,8 @@ if __name__ == '__main__':
     (jogador_humano, jogador_agente) = jogo.inicializar_jogadores()
 
     print("QUARTO")
-    jogo.imprimir()
 
-    quantidade_jogadas_randomicas = 10
+    quantidade_jogadas_randomicas = 0
 
     ganhou = "I"
     while ganhou == "I":
@@ -36,8 +35,8 @@ if __name__ == '__main__':
         jogo = jogo.jogar(jogada_agente)
 
         if jogo.estado.checkEstado() == "V":
-            print(f"{jogo.turno().proximo_turno()} GANHOU!")
+            print(f"{jogo.turno().proximo_turno().identificador} GANHOU!")
             jogo.imprimir()
             break
-        jogo.imprimir()
+        # jogo.imprimir()
         ganhou = jogo.estado.checkEstado()

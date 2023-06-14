@@ -30,7 +30,7 @@ class JogadorHumanoQuarto(JogadorHumano):
         escolha = ValidaEscolhaQuarto(None)
         while not escolha.e_valida(jogo):
             print("Pecas disponiveis: " + str(jogo.estado.tabuleiro.pecasRestantes()))
-            print("Jogador humano, escolha uma peça: (index)")
+            print(f"Jogador {jogo.turno().proximo_turno().identificador}, escolha uma peça: (index)")
             
             ipeca = input()
             escolha.peca = jogo.estado.tabuleiro.getPecas()[int(ipeca)]
@@ -41,6 +41,7 @@ class JogadorHumanoQuarto(JogadorHumano):
         posicao = ValidaPosicaoQuarto(None)
         jogada = JogadaQuarto(None, escolha)
         while not posicao.e_valida(jogo):
+            # print("Pecas disponiveis: " + str(jogo.estado.tabuleiro.pecasRestantes()))
             print(f"Jogador {jogo.turno().identificador}, escolha uma posição: (linha coluna)")
             # posicao onde o humano quer jogar a peça escolhida pelo agente
             posicao.posicao = tuple(map(int, input().split()))
@@ -51,7 +52,7 @@ class JogadorHumanoQuarto(JogadorHumano):
 class JogadorAgenteQuarto(JogadorAgente):
 
     def escolha(self, jogo : Jogo):
-        profundidade_maxima = 5
+        profundidade_maxima = 1
         pior_valor = float("inf")
         melhor_jogada = JogadaQuarto(None, None)
         jogadas_validas = jogo.gerar_jogadas_validas()
@@ -59,7 +60,7 @@ class JogadorAgenteQuarto(JogadorAgente):
         count = 0
         for proximo_jogo in jogadas_validas:
             count += 1
-            utilidade = minimax(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
+            utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima,jogada=proximo_jogo)
             if utilidade < pior_valor:
                 pior_valor = utilidade
                 melhor_jogada = proximo_jogo
@@ -70,14 +71,14 @@ class JogadorAgenteQuarto(JogadorAgente):
     # Calcular uma utilidade para cada estado sucessor e o max ira escolher o melhor
     def jogar(self, jogo : Jogo):
         escolha = jogo.turno().proximo_turno().escolha(jogo)
-        profundidade_maxima = 5
+        profundidade_maxima = 1
         melhor_valor = float("-inf")
         melhor_jogada = JogadaQuarto(None, escolha)
         count = 0
         jogadas_validas = jogo.gerar_posicoes_validas(escolha)
         for proximo_jogo in jogadas_validas:
             count += 1
-            utilidade = minimax(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima)
+            utilidade = minimax_alfabeta(jogo.jogar(proximo_jogo), jogo.turno(), profundidade_maxima,jogada=proximo_jogo)
             if utilidade > melhor_valor:
                 melhor_valor = utilidade
                 melhor_jogada = proximo_jogo
@@ -137,20 +138,34 @@ class JogoQuarto(Jogo):
     def venceu(self):
         return self.winLinha(self.estado) or self.winColuna(self.estado) or self.winDiagonal(self.estado)
     
-    def calcular_utilidade(self, jogo : Jogo, jogador):
+    def calcular_utilidade(self, jogo : Jogo, jogador, jogada):
 
         utilidade = 0
 
         # Checar quantas pecas em comum tem na vertical, horizontal e diagonal
 
         # Se tiver apenas uma peca da menos pontos, se tiver duas pecas com algum atributo em comum da mais pontos, se tiver tres com algum atributo em comum da o maximo de pontos
+        def calc_utilidade_jogada(lista : list, jogada : JogadaQuarto):
+            tempUtilidade = 0
+            mapa : map
+            for mapa in lista:
+                if mapa:
+                    for elemento in jogada.escolha.nome:
+                        if elemento in mapa:
+                            if mapa[elemento] == 2:
+                                tempUtilidade += 25
+                            if mapa[elemento] == 3:
+                                tempUtilidade += 50
+                            if mapa[elemento] == 4:
+                                tempUtilidade += 100
+
+
+            return tempUtilidade
 
         # Checar quantas pecas tem na linha se elas tem algo em comum em peca.nome
 
         # Horizontal
         def emComumLinha(q : Quarto):
-
-            tempUtilidade = 0
 
             pecasNoTabuleiro = []
             for linha in q.tabuleiro.getLinhas():
@@ -179,22 +194,11 @@ class JogoQuarto(Jogo):
                     
                 lstCount.append(countLinha)
 
-            for linha in lstCount:
-                for elemento in linha:
-                    if linha[elemento] == 2:
-                        tempUtilidade += 10
-                    if linha[elemento] == 3:
-                        tempUtilidade += 70
-                    if linha[elemento] == 4:
-                        tempUtilidade += 1000
-
-            return tempUtilidade
+            return lstCount
         
 
         # Vertical
         def emComumColuna(q : Quarto):
-
-            tempUtilidade = 0
 
             pecasNoTabuleiro = []
             for coluna in q.tabuleiro.getColunas():
@@ -223,21 +227,11 @@ class JogoQuarto(Jogo):
                     
                 lstCount.append(countColuna)
 
-            for coluna in lstCount:
-                for elemento in coluna:
-                    if coluna[elemento] == 2:
-                        tempUtilidade += 10
-                    if coluna[elemento] == 3:
-                        tempUtilidade += 70
-                    if coluna[elemento] == 4:
-                        tempUtilidade += 1000
-
-            return tempUtilidade
+            return lstCount
         
         # Diagonal
         def emComumDiagonal(q : Quarto):
-    
-            tempUtilidade = 0
+
         
             pecasNoTabuleiro = []
             for diagonal in q.tabuleiro.getDiagonais():
@@ -266,34 +260,26 @@ class JogoQuarto(Jogo):
                     
                 lstCount.append(countDiagonal)
         
-            for diagonal in lstCount:
-                for elemento in diagonal:
-                    if diagonal[elemento] == 2:
-                        tempUtilidade += 10
-                    if diagonal[elemento] == 3:
-                        tempUtilidade += 100
-                    if diagonal[elemento] == 4:
-                        tempUtilidade += 1000
-        
-            return tempUtilidade
+            return lstCount
 
-        utilidade += emComumLinha(jogo.estado)
-        utilidade += emComumColuna(jogo.estado)
-        utilidade += emComumDiagonal(jogo.estado)
+        linha = emComumLinha(jogo.estado)
+        coluna = emComumColuna(jogo.estado)
+        diagonal = emComumDiagonal(jogo.estado)
+
+        utilidade += calc_utilidade_jogada(linha, jogada)
+        utilidade += calc_utilidade_jogada(coluna, jogada)
+        utilidade += calc_utilidade_jogada(diagonal, jogada)
         # Checar quantas pecas tem na vertical se elas tem algo em comum em peca.nome
 
         # Checar quantas pecas tem na diagonal se elas tem algo em comum em peca.nome
 
         # print(utilidade)
-
-        if self.venceu() and jogador.e_min():
-            # Se eh min sempre negativo
-            return utilidade * -1
-        elif self.venceu() and jogador.e_max():
-            # Se eh max sempre positivo
+        if jogador.e_min():
+            utilidade *= -1
+        if self.venceu():
             return utilidade
-        else:
-            return 0
+        
+        return utilidade
     
     def winLinha(self, e : Quarto):
         abreviacoes = []

@@ -86,7 +86,7 @@ class Tabuleiro():
             i+=1
     
     def jogarPeca(self, peca, linha, coluna):
-        # Checkar se tem uma peca na mesma posicao no tabuleiro
+        # Checar se tem uma peca na mesma posicao no tabuleiro
         if not self.tabuleiro[linha][coluna]:
             if peca in self.pecas:
                 self.tabuleiro[linha][coluna] = peca
